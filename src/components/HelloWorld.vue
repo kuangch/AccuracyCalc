@@ -60,7 +60,7 @@
             </el-select>
         </div>
         <div class="para">
-            <el-button class="calc" @click="calc">计算</el-button>
+            <el-button class="btn" @click="calc">计算</el-button>
         </div>
 
         <el-table
@@ -85,13 +85,17 @@
 
         </el-table>
 
+        <div v-if="tableData.length" class="para">
+            <el-button class="btn" @click="exportFile">导出</el-button>
+        </div>
+
 
     </div>
 
 </template>
 
 <script>
-
+    import excel from '../service/utils/excel';
     let reg = require('../assets/reg.jpg')
     export default {
         name: 'HelloWorld',
@@ -180,6 +184,45 @@
                     _this.tableData.push(row)
                     L += _this.L.interval
                 }
+            },
+            exportFile(){
+
+                let _this = this
+                let data = []
+
+                for (let i in _this.tableData){
+                    let row = []
+                    let cols = _this.tableData[i]
+
+                    let header = []
+                    for( let colName in cols){
+
+                        'L' === colName ? row.unshift(cols[colName]) : row.push(cols[colName])
+
+                        if( 0 == i){
+                            if ('L' === colName){
+                                header.unshift("L\\d")
+                                continue
+                            }
+                            for (let d in _this.dCol){
+                                if (colName === _this.dCol[d]['prop']){
+                                    header.push(_this.dCol[d]['value'])
+                                }
+                            }
+                        }
+                    }
+
+                    if (0 == i){
+                        data.unshift(header)
+                    }
+                    data.push(row)
+                }
+
+                excel.saveArray2local(data,function (result) {
+                    if(!result){
+                        _this.$message.error('导出失败')
+                    }
+                },'AccuracyCalcResult-' + new Date().toISOString() + '.xlsx')
             }
         }
     }
@@ -204,7 +247,7 @@
             min-width: 15rem;
             max-width: 25rem;
 
-            .calc{
+            .btn{
                 margin-top: 1rem;
                 margin-bottom: 1rem;
                 width: 100%;

@@ -20,6 +20,7 @@ import {
     TableColumn,
     Col,
     Row,
+    Message
 } from 'element-ui'
 
 import OfflineInfo from '../../components/OfflineInfo'
@@ -37,6 +38,7 @@ export default function (Vue) {
     Vue.use(Row)
     Vue.use(Slider)
     Vue.use(Switch)
+    Vue.prototype.$message = Message
 
     Vue.use(ConvenienceImage)
     Vue.use(OfflineInfo)
