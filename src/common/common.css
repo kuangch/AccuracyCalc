@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+img{border:none;}
+ul,ol{list-style:none;}
+input,select,textarea{outline:none;  background:#FFF;}
+textarea{resize:none;}
+a{text-decoration:none;}
+body{
+    display: flex;
+    min-height: 100vh;
+    height: 100vh;
+    flex-direction: column;
+}
+@media screen and (max-width: 1920px){
+    html,body{
+        font-size:20px;
+    }
+}
+@media screen and (max-width: 1480px){
+    html,body{
+        font-size:16px;
+    }
+}
+@media screen and (max-width: 800px){
+    html,body{
+        font-size:12px;
+    }
+}
+.ovfl-ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+}

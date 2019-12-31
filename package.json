@@ -1,0 +1,38 @@
+{
+  "name": "AccuracyCalc",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "convenience-image": "^1.0.0",
+    "element-ui": "^2.4.10",
+    "register-service-worker": "^1.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.0.5",
+    "@vue/cli-plugin-pwa": "^4.0.0-rc.0",
+    "@vue/cli-plugin-unit-mocha": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "chai": "^4.1.2",
+    "compression-webpack-plugin": "^2.0.0",
+    "node-sass": "^4.10.0",
+    "progress-bar-webpack-plugin": "^1.11.0",
+    "sass-loader": "^7.1.0",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.2",
+    "vue-template-compiler": "^2.5.17",
+    "workbox-webpack-plugin": "^4.3.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
