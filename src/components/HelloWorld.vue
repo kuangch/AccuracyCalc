@@ -85,7 +85,7 @@
 
         </el-table>
 
-        <div v-if="tableData.length" class="para">
+        <div class="para" v-if="tableData.length" >
             <el-button class="btn" @click="exportFile">导出</el-button>
         </div>
 
@@ -96,6 +96,7 @@
 
 <script>
     import excel from '../service/utils/excel';
+
     let reg = require('../assets/reg.jpg')
     export default {
         name: 'HelloWorld',
@@ -143,7 +144,7 @@
 
                 singleLValue: 55,
                 useRangeL: true,
-                colWidth: 95,
+                colWidth: 96,
                 dCol: [],
                 tableData: []
 
@@ -229,6 +230,22 @@
 </script>
 
 <style scoped lang="scss">
+    @media screen and (max-width: 1920px) {
+        .reg, .para {
+            font-size: 20px;
+        }
+    }
+    @media screen and (max-width: 1480px) {
+        .reg, .para {
+            font-size: 16px;
+        }
+    }
+    @media screen and (max-width: 800px) {
+        .reg, .para {
+            font-size: 12px;
+        }
+    }
+
     .c {
         width: 100%;
         display: flex;
@@ -258,7 +275,7 @@
     .el-table{
         font-size: 12px;
         width: 96%;
-        max-width: 810px;
+        max-width: 818px;
     }
 
 </style>
