@@ -1,5 +1,7 @@
 <template>
     <div id="app">
+      <div class="header_bg">
+      </div>
       <div class="header">
         <div class="title">
           <div class="back">
@@ -32,8 +34,9 @@
             </div>
           </div>
           <div class="person">
+            <convenience-image :src-nor="bg"></convenience-image>
             <div class="pic">
-              <img :src="hulei">
+              <convenience-image :src-nor="personPic" alignment='max-center' radius="5px"></convenience-image>
             </div>
           </div>
           <div class="result">
@@ -47,11 +50,11 @@
           </div>
           <div class="item">
             <span class="name">姓 名:</span>
-            <span class="value">户*</span>
+            <span class="value">{{personName}}</span>
           </div>
           <div class="item">
             <span class="name">身份证号:</span>
-            <span class="value">37**************99</span>
+            <span class="value">{{personId}}</span>
           </div>
           <div class="item">
             <span class="name">查询时间:</span>
@@ -71,21 +74,13 @@
 
 <script>
 
-    const packageJson = require('../../../package')
-    const wh = require('../../assets/wenhao.png')
-    const dh = require('../../assets/duihao.png')
-    const bk = require('../../assets/back.png')
-    const cl = require('../../assets/close.png')
-    const mo = require('../../assets/more.png')
-
-    import HelloWorld from '../../components/HelloWorld.vue'
-
     export default {
         name: 'app',
-        components: {
-            HelloWorld
-        },
         created: function () {
+
+          function getUrlKey(name) {
+            return location.href.substring(location.href.lastIndexOf('/') + 1)
+          }
 
           /**************************************时间格式化处理************************************/
           function dateFtt(fmt,date)
@@ -116,6 +111,14 @@
           _this.realDay = dateFtt("yyyy年MM月dd日", date);
           _this.realTime = dateFtt("hh:mm:ss", date);
 
+          let name = getUrlKey("name");
+          if(PERSON[name]){
+            console.log(PERSON[name]);
+            _this.personName = _this.getSerName(PERSON[name].name);
+            _this.personId = PERSON[name].id;
+            _this.personPic = PERSON[name].pic;
+          }
+
           setInterval(function (){
 
             let date = new Date();
@@ -125,26 +128,36 @@
 
           }, 1000);
         },
-        beforeDestroy() {
-        },
         data() {
+            let _this = this;
             return {
-                packageJson,
               qtime: "11-27 09:20",
               ltime: "11-27",
               realDay: "2021年11月26日",
               realTime: "10:20:10",
-              wenhao: wh,
-              duihao: dh,
-              close: cl,
-              back: bk,
-              more: mo,
+              wenhao: require('../../assets/wenhao.png'),
+              duihao: require('../../assets/duihao.png'),
+              close: require('../../assets/close.png'),
+              back: require('../../assets/back.png'),
+              more: require('../../assets/more.png'),
               bj: require('../../assets/bj.jpeg'),
               sm: require('../../assets/sm.jpeg'),
-              hulei: require('../../assets/hulei.gif'),
+              bg: require('../../assets/bg.gif'),
+              personName: _this.getSerName(PERSON.name),
+              personId: PERSON.id,
+              personPic: PERSON.pic,
             }
         },
-        methods: {}
+        methods: {
+          getSerName: (fullname) =>{
+            let len = fullname.length;
+            let serStr = ""
+            for(let i=0; i < len-1; i++){
+              serStr += "*"
+            }
+            return fullname.substring(0, 1) + serStr
+          }
+        }
     }
 
 </script>
@@ -157,13 +170,22 @@
         position: relative;
         background: #f7f7f7;
         min-height: 100vh;
+        overflow: hidden;
 
+        > .header_bg{
+          $size: 240vw;
+          width: $size;
+          height: $size;
+          border-radius: 50%;
+          background-color: $color_main;
+          margin-left: -($size - 100vw)/2;
+          margin-top: -193vw;
+        }
         > .header {
-          border-radius: 0 ;
+          position: absolute;
+          top: 0;
           padding-top: 25px;
           width: 100%;
-            height: 120px;
-            background: $color_main;
           > .title{
             padding-left: 20px;
             padding-right: 10px;
@@ -178,24 +200,27 @@
               font-size: 20px;
             }
             > .right{
-              height: fit-content;
+              height: auto;
               background: #00000050;
               margin-left: auto;
               border-radius: 50px;
-              border: 0.5px solid gray;
-              padding: 2px 12px;
+              border: 0.5px solid #ffffff50;
+              padding: 3px 10px;
+              display: flex;
+              align-items:center;
+
               > .more{
                 display: inline-block;
                 width: $header_icon_size;
                 height: $header_icon_size;
               }
               > .divider{
-                margin-left: 12px;
-                margin-right: 12px;
+                margin-left: 10px;
+                margin-right: 10px;
                 display: inline-block;
                 background: #ffffff50;
                 width: 0.5px;
-                height: $header_icon_size - 5px;;
+                height: $header_icon_size - 8px;
               }
               > .close{
                 display: inline-block;
@@ -251,30 +276,20 @@
               }
             }
             > .person{
-              width: fit-content;
+              position: relative;
               margin: 15px auto;
-
+              $size: 200px;
+              width: $size;
+              height: $size;
 
               > .pic{
-                //border: 10px dotted #6600d7 ;
-                $size: 200px;
+                position: absolute;
+                $size: 173px;
                 width: $size;
                 height: $size;
-                position: relative;
-
-                > img{
-                  width: auto !important;
-                  height: auto !important;
-                  position: absolute;
-                  max-width: 100% !important;
-                  max-height: 100% !important;
-                  left: 0;
-                  top: 0;
-                  right: 0;
-                  bottom: 0;
-                  margin: 0 auto;
-                  border-radius: 5px;
-                }
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
               }
             }
             > .result{
