@@ -15,7 +15,16 @@ let config = {
 
     pwa: {
         appleMobileWebAppCapable: 'yes',
-        appleMobileWebAppStatusBarStyle: 'black',
+        appleMobileWebAppStatusBarStyle: 'white',
+
+        // apple 配置
+        themeColor: 'white',
+        msTileColor: 'white',
+        // android 配置
+        manifestOptions: {
+            theme_color: 'white',
+            background_color: 'white'
+        },
 
         // 配置 workbox 插件
         workboxPluginMode: 'InjectManifest',
