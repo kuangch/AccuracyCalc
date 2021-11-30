@@ -12,6 +12,7 @@
     "convenience-image": "^1.1.0",
     "element-ui": "^2.4.10",
     "register-service-worker": "^1.6.2",
+    "vue-qrcode-reader": "^3.0.6",
     "xlsx": "^0.15.4"
   },
   "devDependencies": {

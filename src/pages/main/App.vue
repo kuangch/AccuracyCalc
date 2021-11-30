@@ -159,7 +159,7 @@
           },
 
           gotoHome: () => {
-            location.href = '/'
+            history.back();
           }
         }
     }

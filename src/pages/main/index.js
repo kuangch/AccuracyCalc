@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Base from '../../service/base'
-import '../../registerServiceWorker'
+// import '../../registerServiceWorker'
 Vue.config.productionTip = false
 
 Vue.use(Base)

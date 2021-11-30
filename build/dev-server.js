@@ -12,8 +12,9 @@ let devServer = {
         rewrites:[
             { from: RegExp(`^\/${packageJson.name}`), to: `/${packageJson.name}` }
         ]
-    }
+    },
 
+    https: true
 }
 
 module.exports = devServer

@@ -1,5 +1,8 @@
 <template>
     <div id="app">
+      <div v-show="qrcodeShow" class="qrcode">
+        <vue-qrcode ref="qrcode" :options="qrcodeOpts"></vue-qrcode>
+      </div>
       <div class="header_bg">
       </div>
       <div class="header">
@@ -25,7 +28,7 @@
             <div class="txt">{{personName}}</div>
             <div class="right"></div>
           </div>
-          <div class="item">
+          <div class="item" @click="scanQrcode()">
             <div class="icon">
               <convenience-image :src-nor="require('../../assets/brxx.jpg')" alignment="max-contain"></convenience-image>
             </div>
@@ -77,8 +80,13 @@
 
 <script>
 
+    import qrcode from '../../components/Qrcode/App.vue';
+
     export default {
         name: 'app',
+        components: {
+          'vue-qrcode': qrcode,
+        },
         created: function () {
 
           function getUrlKey(name) {
@@ -101,9 +109,34 @@
               more: require('../../assets/more.png'),
               bj: require('../../assets/bj.png'),
               personName:PERSON.name,
+              qrcodeShow: false,
+
+              qrcodeOpts: {
+                success: _this.onQrSuccess,
+                decodeCb: _this.onQrDecode,
+              }
             }
         },
         methods: {
+          scanQrcode: function (){
+            this.qrcodeShow = true;
+            this.$refs.qrcode.open();
+          },
+          onQrSuccess: function(success, reason){
+            if (!success){
+              alert(reason)
+            }
+            console.log('open qr camera ' + success)
+          },
+          onQrDecode: function(result){
+            this.gotoMain();
+            this.$refs.qrcode.close();
+          },
+
+          toggleFlash: function (){
+            this.$refs.qrcode.toggleFlash()
+          },
+
           gotoMain: ()=>{
             console.log("goto main page")
             location.href = "/JKB"
@@ -116,27 +149,36 @@
 <style lang="scss" scoped>
     $header_content_height: 5rem;
     $header_icon_size: 25px;
+    $header_height: 40px;
 
     #app {
         position: relative;
         background: #f7f7f7;
+        height: fit-content;
         min-height: 100vh;
         overflow: hidden;
 
+        > .qrcode{
+          z-index: 10000;
+          position: absolute;
+          width: 100%;
+          height: 100vh;
+        }
+
         > .header_bg{
-          $size: 240vw;
+          $size: 100vw;
+          background: $color_main;
           width: $size;
-          height: $size;
-          border-radius: 50%;
-          background-color: $color_main;
-          margin-left: -($size - 100vw)/2;
-          margin-top: -193vw;
+          height: $size * 0.6;
         }
         > .header {
-          position: absolute;
+          background: $color_main;
+          position: fixed;
           top: 0;
+          z-index: 1000;
           padding-top: 25px;
           width: 100%;
+          height: $header_height;
           > .title{
             padding-left: 20px;
             padding-right: 10px;
@@ -183,6 +225,7 @@
           position: absolute;
           top: 0;
           margin-top: 80px;
+          margin-bottom: 30px;
           width: 100%;
           z-index: 10;
 
