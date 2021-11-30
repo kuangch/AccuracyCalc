@@ -4,7 +4,7 @@
       </div>
       <div class="header">
         <div class="title">
-          <div class="back">
+          <div class="back" @click="gotoHome">
             <convenience-image :src-nor="back" alignment='max-contain'></convenience-image>
           </div>
           <div class="jkb">北京健康宝</div>
@@ -65,7 +65,7 @@
             <span class="value" style="color: #e90009">{{ltime}} 24:00</span>
           </div>
         </div>
-        <div class="back">返回首页</div>
+        <div class="back" @click="gotoHome()">返回首页</div>
         <div class="info">北京市大数据中心</div>
       </div>
 
@@ -140,7 +140,7 @@
               close: require('../../assets/close.png'),
               back: require('../../assets/back.png'),
               more: require('../../assets/more.png'),
-              bj: require('../../assets/bj.jpeg'),
+              bj: require('../../assets/bj.png'),
               sm: require('../../assets/sm.jpeg'),
               bg: require('../../assets/bg.gif'),
               personName: _this.getSerName(PERSON.name),
@@ -156,6 +156,10 @@
               serStr += "*"
             }
             return fullname.substring(0, 1) + serStr
+          },
+
+          gotoHome: () => {
+            location.href = '/'
           }
         }
     }
@@ -259,9 +263,9 @@
               display: flex;
               align-items: center;
               > .left{
-                margin-left: 10px;
-                width: $icon_size;
-                height: $icon_size;
+                margin-left: $icon_size * 0.3;
+                width: $icon_size * 0.8;
+                height: $icon_size * 0.8;
               }
               > .rt{
                 flex: 1;

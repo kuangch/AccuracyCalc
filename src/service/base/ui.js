@@ -27,17 +27,17 @@ import OfflineInfo from '../../components/OfflineInfo'
 
 export default function (Vue) {
 
-    Vue.use(Button)
-    Vue.use(Select)
-    Vue.use(Option)
-    Vue.use(Input)
-    Vue.use(InputNumber)
-    Vue.use(Table)
-    Vue.use(TableColumn)
-    Vue.use(Col)
-    Vue.use(Row)
-    Vue.use(Slider)
-    Vue.use(Switch)
+    // Vue.use(Button)
+    // Vue.use(Select)
+    // Vue.use(Option)
+    // Vue.use(Input)
+    // Vue.use(InputNumber)
+    // Vue.use(Table)
+    // Vue.use(TableColumn)
+    // Vue.use(Col)
+    // Vue.use(Row)
+    // Vue.use(Slider)
+    // Vue.use(Switch)
     Vue.prototype.$message = Message
 
     Vue.use(ConvenienceImage)
