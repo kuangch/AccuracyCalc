@@ -3,8 +3,6 @@
       <div v-show="qrcodeShow" class="qrcode">
         <vue-qrcode ref="qrcode" :options="qrcodeOpts"></vue-qrcode>
       </div>
-      <div class="header_bg">
-      </div>
       <div class="header">
         <div class="title">
           <div class="jkb">北京健康宝</div>
@@ -19,6 +17,8 @@
           </div>
         </div>
       </div>
+      <div class="header_bg"></div>
+
       <div class="over">
         <div class="main">
           <div class="item">
@@ -156,7 +156,8 @@
         background: #f7f7f7;
         height: fit-content;
         min-height: 100vh;
-        overflow: hidden;
+        overflow-y: scroll;
+        overflow-x: hidden;
 
         > .qrcode{
           z-index: 10000;
@@ -164,68 +165,70 @@
           width: 100%;
           height: 100vh;
         }
-
-        > .header_bg{
-          $size: 100vw;
-          background: $color_main;
-          width: $size;
-          height: $size * 0.6;
-        }
         > .header {
-          background: $color_main;
-          position: fixed;
-          top: 0;
-          z-index: 1000;
-          padding-top: 25px;
-          width: 100%;
-          height: $header_height;
-          > .title{
-            padding-left: 20px;
-            padding-right: 10px;
+        background: $color_main;
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        padding-top: 25px;
+        width: 100%;
+        height: $header_height;
+        > .title{
+          padding-left: 20px;
+          padding-right: 10px;
+          display: flex;
+          align-items: center;
+          > .jkb{
+            color: white;
+            font-size: 20px;
+          }
+          > .right{
+            height: auto;
+            background: #00000050;
+            margin-left: auto;
+            border-radius: 50px;
+            border: 0.5px solid #ffffff50;
+            padding: 3px 10px;
             display: flex;
-            align-items: center;
-            > .jkb{
-              color: white;
-              font-size: 20px;
-            }
-            > .right{
-              height: auto;
-              background: #00000050;
-              margin-left: auto;
-              border-radius: 50px;
-              border: 0.5px solid #ffffff50;
-              padding: 3px 10px;
-              display: flex;
-              align-items:center;
+            align-items:center;
 
-              > .more{
-                display: inline-block;
-                width: $header_icon_size;
-                height: $header_icon_size;
-              }
-              > .divider{
-                margin-left: 10px;
-                margin-right: 10px;
-                display: inline-block;
-                background: #ffffff50;
-                width: 0.5px;
-                height: $header_icon_size - 8px;
-              }
-              > .close{
-                display: inline-block;
-                width: $header_icon_size;
-                height: $header_icon_size;
-              }
+            > .more{
+              display: inline-block;
+              width: $header_icon_size;
+              height: $header_icon_size;
+            }
+            > .divider{
+              margin-left: 10px;
+              margin-right: 10px;
+              display: inline-block;
+              background: #ffffff50;
+              width: 0.5px;
+              height: $header_icon_size - 8px;
+            }
+            > .close{
+              display: inline-block;
+              width: $header_icon_size;
+              height: $header_icon_size;
             }
           }
-
-
         }
+
+
+      }
+        > .header_bg{
+          $size: 240vw;
+          width: $size;
+          height: $size;
+          border-radius: 50%;
+          background-color: $color_main;
+          margin-left: -($size - 100vw)/2;
+          margin-top: -170vw;
+        }
+
         > .over {
           position: absolute;
           top: 0;
           margin-top: 80px;
-          margin-bottom: 30px;
           width: 100%;
           z-index: 10;
 
@@ -244,6 +247,7 @@
               margin-top: 18px;
               background: white;
               border-radius: 10px;
+              box-shadow: 0 10px 10px -10px #ccc;
               > .icon{
                 $size : 40px;
                 margin-left: 20px;
@@ -268,10 +272,11 @@
           }
 
           > .info{
-            margin-top: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
             text-align: center;
-              height: 12px;
-              color: #c5c5c5;
+            font-size: 12px;
+            color: #c5c5c5;
           }
 
         }

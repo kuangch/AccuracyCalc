@@ -1,6 +1,6 @@
 var PERSON = {
 
-    name: "张三",
+    name: "户磊",
     id: "37**************99",
     pic: "/img/hl.jpg",
 
