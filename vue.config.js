@@ -11,6 +11,7 @@ let config = {
     devServer,
     css,
     outputDir: settings.outputDir,
+    publicPath: './',
 
     pwa: {
         appleMobileWebAppCapable: 'yes',
@@ -129,13 +130,10 @@ const pages = {}
 const projectName = packageJson.name
 
 const getHtmlFile = function (pageName) {
-    let fileName = `${projectName}/${pageName}.html`
+    let fileName = `${pageName}.html`
     switch (pageName){
         case 'home':
             fileName = 'index.html'
-            break
-        case 'main':
-            fileName = `${projectName}/index.html`
             break
     }
 

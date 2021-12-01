@@ -139,7 +139,7 @@
 
           gotoMain: ()=>{
             console.log("goto main page")
-            location.href = "/JKB/"
+            location.href += "main.html"
           }
         }
     }
