@@ -87,13 +87,24 @@
         components: {
           'vue-qrcode': qrcode,
         },
-        created: function () {
+
+      mounted() {
+        let _this = this;
+        // 如果支持 popstate 一般移动端都支持了
+        if (window.history && window.history.pushState) {
+          // 往历史记录里面添加一条新的当前页面的url
+          history.pushState(null, null, document.URL);
+          // 给 popstate 绑定一个方法 监听页面刷新
+          window.addEventListener('popstate', _this.backEvent, false);//false阻止默认事件
+        }
+      },
+      created: function () {
+
+          let _this = this;
 
           function getUrlKey(name) {
             return location.href.substring(location.href.lastIndexOf('/') + 1)
           }
-
-          let _this = this;
 
           let name = getUrlKey("name");
           if(PERSON[name]){
@@ -117,7 +128,10 @@
               }
             }
         },
-        methods: {
+      destroyed() {
+          window.removeEventListener('popstate', this.backEvent, false);
+      },
+      methods: {
           scanQrcode: function (){
             this.qrcodeShow = true;
             this.$refs.qrcode.open();
@@ -140,6 +154,16 @@
           gotoMain: ()=>{
             console.log("goto main page")
             location.href += "main.html"
+          },
+          backEvent: function (){
+            let _this = this;
+            if (_this.qrcodeShow){
+              history.pushState(null, null, document.URL);
+              _this.qrcodeShow = false;
+              _this.$refs.qrcode.close();
+            }else{
+              history.back()
+            }
           }
         }
     }
