@@ -78,8 +78,24 @@
         name: 'app',
         created: function () {
 
-          function getUrlKey(name) {
-            return location.href.substring(location.href.lastIndexOf('/') + 1)
+          function getUrlKey(queryName) {
+            var reg = new RegExp("(^|&)" + queryName + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if ( r != null ){
+              return decodeURI(r[2]);
+            }else{
+              return null;
+            }
+          }
+
+          function getLocalPerson() {
+            let localPerson = localStorage.getItem('person');
+            try {
+              localPerson = JSON.parse(localPerson)
+            }catch (e){
+              console.log('no local person!')
+            }
+            return localPerson
           }
 
           /**************************************时间格式化处理************************************/
@@ -105,18 +121,21 @@
           let _this = this;
           let date = new Date();
 
-
           _this.qtime = dateFtt("MM-dd hh:mm", date);
           _this.ltime = dateFtt("MM-dd", date);
           _this.realDay = dateFtt("yyyy年MM月dd日", date);
           _this.realTime = dateFtt("hh:mm:ss", date);
 
-          let name = getUrlKey("name");
-          if(PERSON[name]){
-            console.log(PERSON[name]);
-            _this.personName = _this.getSerName(PERSON[name].name);
-            _this.personId = PERSON[name].id;
-            _this.personPic = PERSON[name].pic;
+          let localPerson = getLocalPerson();
+          if(localPerson && localPerson.name && localPerson.id){
+            console.log("[get local] person: " + localPerson.name);
+            _this.personName = _this.getSerName(localPerson.name);
+            _this.personId = localPerson.id;
+            if(localPerson.pic && localPerson.pic.length > 200){
+              _this.personPic = 'data:image/jpeg;base64,' + localPerson.pic.replace("data:image/jpeg;base64,", "");
+            }else{
+              _this.personPic = PERSON.pic
+            }
           }
 
           setInterval(function (){

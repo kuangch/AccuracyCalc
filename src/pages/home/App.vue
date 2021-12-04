@@ -21,7 +21,7 @@
 
       <div class="over">
         <div class="main">
-          <div class="item">
+          <div class="item" @click="editPerson()">
             <div class="icon">
               <convenience-image :src-nor="bj" alignment="max-contain"></convenience-image>
             </div>
@@ -75,6 +75,23 @@
         <div class="info">北京市大数据中心</div>
       </div>
 
+      <el-dialog
+          title="编辑人员"
+          :visible.sync="centerDialogVisible"
+          width="80%"
+          center>
+        <el-input v-model.trim="personName" placeholder="请输入姓名"></el-input>
+        <el-input style="margin-top: 20px" v-model.trim="personId" placeholder="请输入身份证"></el-input>
+        <el-input style="margin-top: 20px" v-model.trim="personPic"
+                  type="textarea"
+                  :autosize="{ minRows: 4, maxRows: 4 }"
+                  placeholder="请输入照片（base64）"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="centerDialogVisible = false; changePerson()">确 定</el-button>
+        </span>
+      </el-dialog>
+
     </div>
 </template>
 
@@ -98,36 +115,50 @@
           window.addEventListener('popstate', _this.backEvent, false);//false阻止默认事件
         }
       },
-      created: function () {
 
+      beforeCreate() {
+        function getLocalPerson() {
+          let localPerson = localStorage.getItem('person');
+          try {
+            localPerson = JSON.parse(localPerson)
+          }catch (e){
+            console.log('no local person!')
+          }
+          return localPerson
+        }
+
+        let localPerson = getLocalPerson();
+        if(localPerson && localPerson.name && localPerson.id){
+          console.log('[get local] person: ' + localPerson.name);
+          PERSON.name = localPerson.name;
+          PERSON.id = localPerson.id;
+
+          if(localPerson.pic && localPerson.pic.length > 200){
+            PERSON.pic = localPerson.pic;
+          }
+        }
+      },
+      data() {
           let _this = this;
+          return {
+            close: require('../../assets/close.png'),
+            back: require('../../assets/back.png'),
+            more: require('../../assets/more.png'),
+            bj: require('../../assets/bj.png'),
 
-          function getUrlKey(name) {
-            return location.href.substring(location.href.lastIndexOf('/') + 1)
-          }
+            centerDialogVisible: false,
 
-          let name = getUrlKey("name");
-          if(PERSON[name]){
-            console.log(PERSON[name]);
-            _this.personName = _this.getSerName(PERSON[name].name);
-          }
-        },
-        data() {
-            let _this = this;
-            return {
-              close: require('../../assets/close.png'),
-              back: require('../../assets/back.png'),
-              more: require('../../assets/more.png'),
-              bj: require('../../assets/bj.png'),
-              personName:PERSON.name,
-              qrcodeShow: false,
+            personName:PERSON.name,
+            personId:PERSON.id,
+            personPic:PERSON.pic,
 
-              qrcodeOpts: {
-                success: _this.onQrSuccess,
-                decodeCb: _this.onQrDecode,
-              }
+            qrcodeShow: false,
+            qrcodeOpts: {
+              success: _this.onQrSuccess,
+              decodeCb: _this.onQrDecode,
             }
-        },
+          }
+      },
       destroyed() {
           window.removeEventListener('popstate', this.backEvent, false);
       },
@@ -151,7 +182,7 @@
             this.$refs.qrcode.toggleFlash()
           },
 
-          gotoMain: ()=>{
+          gotoMain: function(){
             console.log("goto main page")
             location.href += "main.html"
           },
@@ -164,6 +195,19 @@
             }else{
               history.back()
             }
+          },
+          editPerson: function (){
+              this.centerDialogVisible = true;
+          },
+          changePerson: function (){
+            let _this = this;
+            let localPerson = {
+              name: _this.personName,
+              id: _this.personId,
+              pic: _this.personPic
+            }
+            console.log('[save local] person: ' + _this.personName)
+            localStorage.setItem('person', JSON.stringify(localPerson));
           }
         }
     }
