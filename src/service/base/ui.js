@@ -21,7 +21,8 @@ import {
     // Col,
     // Row,
     Message,
-    Dialog
+    Dialog,
+    Upload
 } from 'element-ui'
 
 import OfflineInfo from '../../components/OfflineInfo'
@@ -40,6 +41,7 @@ export default function (Vue) {
     // Vue.use(Slider)
     // Vue.use(Switch)
     Vue.use(Dialog)
+    Vue.use(Upload)
     Vue.prototype.$message = Message
 
     Vue.use(ConvenienceImage)

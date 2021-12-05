@@ -25,7 +25,7 @@
             <div class="icon">
               <convenience-image :src-nor="bj" alignment="max-contain"></convenience-image>
             </div>
-            <div class="txt">{{personName}}</div>
+            <div class="txt">{{person.name}}</div>
             <div class="right"></div>
           </div>
           <div class="item" @click="scanQrcode()">
@@ -80,14 +80,23 @@
           :visible.sync="centerDialogVisible"
           width="80%"
           center>
-        <el-input v-model.trim="personName" placeholder="请输入姓名"></el-input>
-        <el-input style="margin-top: 20px" v-model.trim="personId" placeholder="请输入身份证"></el-input>
-        <el-input style="margin-top: 20px" v-model.trim="personPic"
-                  type="textarea"
-                  :autosize="{ minRows: 4, maxRows: 4 }"
-                  placeholder="请输入照片（base64）"></el-input>
+        <el-input v-model.trim="select.name" placeholder="请输入姓名"></el-input>
+        <el-input style="margin-top: 20px" v-model.trim="select.id" placeholder="请输入身份证"></el-input>
+        <el-upload
+            style="margin-top: 20px"
+            class="avatar-uploader"
+            action=""
+            accept=".jpg, .png, .jpeg"
+            :on-change="getFile"
+            :auto-upload="false"
+            :show-file-list="false">
+          <convenience-image style="width: 150px; height: 150px;border-radius: 5px"
+                             v-if="select.pic" :src-nor="select.pic" alignment="max-center"></convenience-image>
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <i @click="resetPerson()" class="reset">重置</i>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">取 消</el-button>
+          <el-button @click="centerDialogVisible = false; cancelChangePerson()">取 消</el-button>
           <el-button type="primary" @click="centerDialogVisible = false; changePerson()">确 定</el-button>
         </span>
       </el-dialog>
@@ -116,7 +125,8 @@
         }
       },
 
-      beforeCreate() {
+      created() {
+        let _this = this;
         function getLocalPerson() {
           let localPerson = localStorage.getItem('person');
           try {
@@ -129,13 +139,10 @@
 
         let localPerson = getLocalPerson();
         if(localPerson && localPerson.name && localPerson.id){
-          console.log('[get local] person: ' + localPerson.name);
-          PERSON.name = localPerson.name;
-          PERSON.id = localPerson.id;
-
-          if(localPerson.pic && localPerson.pic.length > 200){
-            PERSON.pic = localPerson.pic;
-          }
+          console.log('[get local] person:');
+          console.dir(localPerson);
+          _this.person = localPerson
+          _this.select = JSON.parse(JSON.stringify(localPerson))
         }
       },
       data() {
@@ -148,9 +155,16 @@
 
             centerDialogVisible: false,
 
-            personName:PERSON.name,
-            personId:PERSON.id,
-            personPic:PERSON.pic,
+            person:{
+              name:PERSON.name,
+              id:PERSON.id,
+              pic:PERSON.pic,
+            },
+            select:{
+              name: PERSON.name,
+              id: PERSON.id,
+              pic: PERSON.pic
+            },
 
             qrcodeShow: false,
             qrcodeOpts: {
@@ -201,13 +215,48 @@
           },
           changePerson: function (){
             let _this = this;
-            let localPerson = {
-              name: _this.personName,
-              id: _this.personId,
-              pic: _this.personPic
-            }
-            console.log('[save local] person: ' + _this.personName)
-            localStorage.setItem('person', JSON.stringify(localPerson));
+            _this.person = _this.select;
+
+            let p = JSON.stringify(_this.person);
+            console.log('[save local] person: ' + p)
+            localStorage.setItem('person', p);
+          },
+          cancelChangePerson: function (){
+            let _this = this;
+            _this.select = JSON.parse(JSON.stringify(_this.person));
+            console.log('cancel change person: ')
+            console.dir(_this.select)
+          },
+          resetPerson: function (){
+            console.log('reset person info')
+            this.select = JSON.parse(JSON.stringify(PERSON))
+            this.$forceUpdate()
+            localStorage.removeItem('person')
+          },
+          getBase64(file){
+            return new Promise(function (resolve, reject){
+              let reader = new FileReader();
+              let base64 = "";
+              reader.readAsDataURL(file);
+              reader.onload = function (){
+                base64 = reader.result
+              }
+              reader.onloadend = function (){
+                resolve(base64)
+              }
+              reader.onerror = function (error){
+                reject(error)
+              }
+            })
+          },
+          getFile: function (file, filelist){
+              let _this = this;
+              this.getBase64(file.raw).then(res => {
+                console.log('get pic success')
+                _this.select.pic = res;
+              },rej =>{
+                console.log(rej)
+              })
           }
         }
     }
@@ -348,6 +397,36 @@
           }
 
         }
+
+        .el-dialog__body {
+          .avatar-uploader {
+            margin-bottom: 10px;
+            .el-upload {
+              border: 1px dashed #d9d9d9;
+              border-radius: 6px;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+            }
+            .el-upload:hover {
+              border-color: #409EFF;
+            }
+          }
+          .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+            text-align: center;
+          }
+          .reset{
+            font-style: normal;
+            font-size: 16px;
+            color: #1292fe;
+          }
+        }
+
     }
 
 </style>

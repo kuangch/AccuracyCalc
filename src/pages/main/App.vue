@@ -131,8 +131,13 @@
             console.log("[get local] person: " + localPerson.name);
             _this.personName = _this.getSerName(localPerson.name);
             _this.personId = localPerson.id;
-            if(localPerson.pic && localPerson.pic.length > 200){
-              _this.personPic = 'data:image/jpeg;base64,' + localPerson.pic.replace("data:image/jpeg;base64,", "");
+            if(localPerson.pic && localPerson.pic.length > 256){
+              let  picstrs = localPerson.pic.split(',');
+              if (picstrs && picstrs.length > 1){
+                _this.personPic = localPerson.pic
+              }else {
+                _this.personPic = 'data:image/png;base64,' + localPerson.pic;
+              }
             }else{
               _this.personPic = PERSON.pic
             }
@@ -375,7 +380,6 @@
               height: 12px;
               color: #c5c5c5;
           }
-
         }
     }
 
