@@ -188,7 +188,7 @@
             console.log('open qr camera ' + success)
           },
           onQrDecode: function(result){
-            this.gotoMain();
+            this.gotoMain(true);
             this.$refs.qrcode.close();
           },
 
@@ -196,9 +196,9 @@
             this.$refs.qrcode.toggleFlash()
           },
 
-          gotoMain: function(){
+          gotoMain: function(isQr){
             console.log("goto main page")
-            location.href += "main.html"
+            location.href += "main.html?qr=" + (isQr ? '1': '0')
           },
           backEvent: function (){
             let _this = this;

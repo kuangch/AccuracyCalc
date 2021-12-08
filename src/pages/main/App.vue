@@ -43,7 +43,7 @@
             <div class="icon">
               <convenience-image :src-nor="duihao" alignment='max-contain'></convenience-image>
             </div>
-            <p class="txt">未见异常</p>
+            <p class="txt">{{isFromQr ? '扫码' : ''}}未见异常</p>
             <div class="info">
               <convenience-image :src-nor="wenhao" alignment='max-contain'></convenience-image>
             </div>
@@ -119,6 +119,10 @@
           }
 
           let _this = this;
+
+          let qr = getUrlKey('qr');
+          _this.isFromQr = qr === '1'
+
           let date = new Date();
 
           _this.qtime = dateFtt("MM-dd hh:mm", date);
@@ -155,6 +159,7 @@
         data() {
             let _this = this;
             return {
+              isFromQr: false,
               qtime: "11-27 09:20",
               ltime: "11-27",
               realDay: "2021年11月26日",
