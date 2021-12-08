@@ -1,9 +1,9 @@
 <template>
-    <div id="app">
+    <div id="app" ref="app">
       <div v-show="qrcodeShow" class="qrcode">
         <vue-qrcode ref="qrcode" :options="qrcodeOpts"></vue-qrcode>
       </div>
-      <div class="header">
+      <div class="header" :style="headStyle">
         <div class="title">
           <div class="jkb">北京健康宝</div>
           <div class="right">
@@ -17,23 +17,35 @@
           </div>
         </div>
       </div>
-      <div class="header_bg"></div>
+      <div class="header_bg">
+        <convenience-image :src-nor="require('../../assets/home-bg.jpg')" alignment="max-center"></convenience-image>
+      </div>
 
       <div class="over">
+        <div class="title">
+          <div class="icon">
+            <convenience-image :src-nor="require('../../assets/xlb.png')" alignment="max-contain"></convenience-image>
+          </div>
+          <div class="content">健康宝更新了，注意以下变化！</div>
+        </div>
         <div class="main">
           <div class="item" @click="editPerson()">
             <div class="icon">
               <convenience-image :src-nor="bj" alignment="max-contain"></convenience-image>
             </div>
             <div class="txt">{{person.name}}</div>
-            <div class="right"></div>
+            <div class="right">
+              <convenience-image :src-nor="require('../../assets/right.png')" alignment="max-contain"></convenience-image>
+            </div>
           </div>
           <div class="item" @click="scanQrcode()">
             <div class="icon">
               <convenience-image :src-nor="require('../../assets/brxx.jpg')" alignment="max-contain"></convenience-image>
             </div>
             <div class="txt">本人信息扫码登记</div>
-            <div class="right"></div>
+            <div class="right">
+              <convenience-image :src-nor="require('../../assets/history.png')" alignment="max-contain"></convenience-image>
+            </div>
           </div>
           <div class="item" @click="gotoMain()">
             <div class="icon">
@@ -122,6 +134,8 @@
           history.pushState(null, null, document.URL);
           // 给 popstate 绑定一个方法 监听页面刷新
           window.addEventListener('popstate', _this.backEvent, false);//false阻止默认事件
+
+          document.getElementById("app").addEventListener("scroll", this.handleScroll, true);
         }
       },
 
@@ -148,6 +162,9 @@
       data() {
           let _this = this;
           return {
+            headStyle: {
+              background: "#1838ff00"
+            },
             close: require('../../assets/close.png'),
             back: require('../../assets/back.png'),
             more: require('../../assets/more.png'),
@@ -175,6 +192,7 @@
       },
       destroyed() {
           window.removeEventListener('popstate', this.backEvent, false);
+          window.removeEventListener('scroll', this.handleScroll, false);
       },
       methods: {
           scanQrcode: function (){
@@ -257,8 +275,19 @@
               },rej =>{
                 console.log(rej)
               })
+          },
+        // 页面移动导航栏改变颜色
+        handleScroll() {
+          let scrollTop = this.$parent.$el.scrollTop
+          //设置背景颜色的透明度
+          console.log(`scrollTop, ${scrollTop}`)
+          if (scrollTop) {
+            this.headStyle.background = `rgba(24,56,255,${scrollTop / 100})`;
+          } else if (scrollTop === 0) {
+            this.headStyle.background = "rgba(24,56,255,0)";
           }
         }
+      }
     }
 
 </script>
@@ -283,13 +312,14 @@
           height: 100vh;
         }
         > .header {
-        background: $color_main;
-        position: fixed;
-        top: 0;
-        z-index: 1000;
-        padding-top: 25px;
-        width: 100%;
-        height: $header_height;
+          background: #1838ff00;
+          position: fixed;
+          top: 0;
+          z-index: 1000;
+          padding-top: 10px;
+          padding-bottom: 5px;
+          width: 100%;
+          height: $header_height;
         > .title{
           padding-left: 20px;
           padding-right: 10px;
@@ -333,21 +363,34 @@
 
       }
         > .header_bg{
-          $size: 240vw;
-          width: $size;
-          height: $size;
-          border-radius: 50%;
-          background-color: $color_main;
-          margin-left: -($size - 100vw)/2;
-          margin-top: -170vw;
+          width: 100%;
+          height: 80vw;
         }
 
         > .over {
           position: absolute;
           top: 0;
-          margin-top: 80px;
+          margin-top: 40px;
           width: 100%;
           z-index: 10;
+
+          > .title{
+            margin-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            > .icon{
+              $size: 25px;
+              width: $size;
+              height: $size;
+            }
+            > .content{
+              font-size: 18px;
+              margin-left: 10px;
+              color: white;
+            }
+          }
 
           > .main{
             width: 100%;
@@ -380,8 +423,8 @@
               }
               > .right{
                 margin-left: auto;
-                margin-right: 10px;
-                $size : 20px;
+                margin-right: 18px;
+                $size : 18px;
                 width: $size;
                 height: $size;
               }

@@ -14,7 +14,7 @@ let devServer = {
         ]
     },
 
-    https: true
+    // https: true
 }
 
 module.exports = devServer
