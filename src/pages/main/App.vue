@@ -59,7 +59,7 @@
           </div>
           <div class="item">
             <span class="name">身份证号:</span>
-            <span class="value">{{personId}}</span>
+            <span class="value">{{safetyId}}</span>
           </div>
           <div class="item">
             <span class="name">查询时间:</span>
@@ -184,6 +184,18 @@
               personName: _this.getSerName(PERSON.name),
               personId: PERSON.id,
               personPic: PERSON.pic,
+            }
+        },
+        computed: {
+            safetyId: {
+              get: function (){
+                if (this.personId && this.personId.length >= 4){
+                  let ret = '**************'
+                  ret = this.personId.substr(0, 2) + ret  + this.personId.substr(this.personId.length - 2, 2);
+                  return ret;
+                }
+                return '11**************20'
+              }
             }
         },
         methods: {
