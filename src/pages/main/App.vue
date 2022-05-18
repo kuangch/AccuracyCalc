@@ -43,12 +43,17 @@
             <div class="icon">
               <convenience-image :src-nor="duihao" alignment='max-contain'></convenience-image>
             </div>
-            <p class="txt">{{isFromQr ? '扫码' : ''}}未见异常</p>
+            <p class="txt" :class="showing ? 'show': 'hide'">{{isFromQr ? '扫码' : ''}}未见异常</p>
             <div class="info">
               <convenience-image :src-nor="wenhao" alignment='max-contain'></convenience-image>
             </div>
           </div>
-          <div class="item">
+          <div class="hs">
+              <convenience-image :src-nor="hs" alignment='max-contain' radius="5px"></convenience-image>
+          </div>
+        </div>
+        <div class="main" style="margin-top: 1rem">
+          <div class="item" style="margin: 0.2rem;">
             <span class="name">姓 名:</span>
             <span class="value">{{personName}}</span>
           </div>
@@ -153,25 +158,29 @@
 
             _this.realTime = dateFtt("hh:mm:ss", date);
 
-
-          }, 1000);
+            if(_this.isFromQr){
+              _this.showing = !_this.showing;
+            }
+          }, 500);
         },
         data() {
             let _this = this;
             return {
+              showing: true,
               isFromQr: false,
               qtime: "11-27 09:20",
               ltime: "11-27",
               realDay: "2021年11月26日",
               realTime: "10:20:10",
               wenhao: require('../../assets/wenhao.png'),
-              duihao: require('../../assets/duihao.png'),
+              duihao: require('../../assets/ewm.png'),
               close: require('../../assets/close.png'),
               back: require('../../assets/back.png'),
               more: require('../../assets/more.png'),
               bj: require('../../assets/bj.png'),
               sm: require('../../assets/sm.jpeg'),
               bg: require('../../assets/bg.gif'),
+              hs: require('../../assets/hs.png'),
               personName: _this.getSerName(PERSON.name),
               personId: PERSON.id,
               personPic: PERSON.pic,
@@ -279,8 +288,8 @@
             position: relative;
             border-radius: 10px;
             text-align: center;
-            padding-top: 12px;
-            padding-bottom: 25px;
+            padding-top: 0.8rem;
+            padding-bottom: 1rem;
             color: white;
 
             font-size: 16px;
@@ -299,7 +308,7 @@
               > .rt{
                 flex: 1;
                 color: grey;
-                font-size: 18px;
+                font-size: 17px;
                 text-align: center;
               }
               > .right{
@@ -310,14 +319,14 @@
             }
             > .person{
               position: relative;
-              margin: 15px auto;
+              margin: 10px auto;
               $size: 200px;
               width: $size;
               height: $size;
 
               > .pic{
                 position: absolute;
-                $size: 173px;
+                $size: 172px;
                 width: $size;
                 height: $size;
                 left: 50%;
@@ -327,31 +336,65 @@
             }
             > .result{
               width: fit-content;
-              margin: 0 auto;
+              margin: 15px auto;
               display: flex;
               align-items: center;
+              $size: 35px;
               > .icon{
-                width: 50px;
-                height: 50px;
+                width: $size;
+                height: $size;
+              }
+
+              > .show{
+                animation: show-txt 0.5s ease-in forwards;
+              }
+              > .hide{
+                animation: hide-txt 0.5s ease-in forwards;
+              }
+
+              @keyframes show-txt {
+                0%{
+                  opacity: 0;
+                }
+                100%{
+                  opacity: 1;
+                }
+              }
+              @keyframes hide-txt {
+                0%{
+                  opacity: 1;
+                }
+                100%{
+                  opacity: 0;
+                }
               }
               > .txt{
                 margin-left: 8px;
                 display: inline-block;
-                font-size: 30px;
-                font-weight: bolder;
+                font-size: 22px;
+                //font-weight: bolder;
                 color: #1cc709;
               }
               > .info{
                 margin-left: 8px;
                 display: inline-block;
-                width: 25px;
-                height: 25px;
+                $size: 20px;
+                width: $size;
+                height: $size;
               }
             }
+
+            > .hs {
+              position: relative;
+              margin: 12px auto 0px;
+              width: 80vw;
+              height: 26vw;
+            }
+
             > .item{
               width: 100%;
               display: flex;
-              margin-top: 18px;
+              margin-top: 12px;
               > .name{
                 margin-left: 15px;
                 letter-spacing: 2px;
